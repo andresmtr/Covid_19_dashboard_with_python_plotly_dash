@@ -54,8 +54,11 @@ DF_total.columns = ['Fecha', 'Continente', 'Pais', 'Total contagiados', 'Total f
 ##################################
 #### Tabla resumen
 
-Today = date.today() ####Yestarday
-fecha2 = Today.strftime("%Y-%m-%d")
+#Today = date.today() ####Yestarday
+#fecha2 = Today.strftime("%Y-%m-%d")
+
+yesterday = date.today()-timedelta(days=1)
+fecha2 = yesterday.strftime("%Y-%m-%d")
 otro = df[df['date'] == fecha2]
 Only_world2 = otro[otro['location'] == 'World']
 Contagios = Only_world2['total_cases'].sum()
