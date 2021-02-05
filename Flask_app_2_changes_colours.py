@@ -45,10 +45,11 @@ DF_Cases = df['total_cases']
 DF_deaths = df['total_deaths']
 DF_Continent = df['continent']
 DF_country = df['location']
+DF_people_vaccinated = df['people_vaccinated']
 
-DF_total = pd.concat([DF_Date, DF_Continent, DF_country, DF_Cases, DF_deaths], axis=1)
+DF_total = pd.concat([DF_Date, DF_Continent, DF_country, DF_Cases, DF_deaths, DF_people_vaccinated], axis=1)
 
-DF_total.columns = ['Fecha', 'Continente', 'Pais', 'Total contagiados', 'Total fallecidos']
+DF_total.columns = ['Fecha', 'Continente', 'Pais', 'Total contagiados', 'Total fallecidos', 'Total vacunados']
 
 
 ##################################
@@ -63,8 +64,9 @@ otro = df[df['date'] == fecha2]
 Only_world2 = otro[otro['location'] == 'World']
 Contagios = Only_world2['total_cases'].sum()
 Total_deaths = Only_world2['total_deaths'].sum()
+Vacunados = Only_world2['people_vaccinated'].sum()
 
-total_res_wor = pd.DataFrame({'Contagiados': [Contagios],'Fallecidos': [Total_deaths], 'Fecha':[fecha2]})
+total_res_wor = pd.DataFrame({'Contagiados': [Contagios],'Fallecidos': [Total_deaths], 'Vacunados':[Vacunados] ,'Fecha':[fecha2]})
 
 ##################################
 #### contagio fecha
@@ -99,11 +101,12 @@ actual = actual[actual['location'] != 'Oceania']
 
 Wd_cases = Wd['total_cases']
 Wd_deaths = Wd['total_deaths']
+Wd_people_vaccinated = Wd['people_vaccinated']
 Wd_date = Wd['date']
 
-date_cases_deaths = pd.concat([Wd_cases, Wd_deaths], axis=1)
+date_cases_deaths = pd.concat([Wd_cases, Wd_deaths, Wd_people_vaccinated], axis=1)
 
-date_cases_deaths.columns = ['Total contagiados', 'Total fallecidos']
+date_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados']
 
 features = date_cases_deaths.columns
 
@@ -114,11 +117,12 @@ features = date_cases_deaths.columns
 iso = actual['iso_code']
 Map_total_cases = actual['total_cases']
 Map_total_deaths = actual['total_deaths']
+Map_people_vaccinated  = actual['people_vaccinated']
 Pais = actual['location']
 
-map_cases_deaths = pd.concat([iso, Map_total_cases, Map_total_deaths, Pais], axis=1)
+map_cases_deaths = pd.concat([iso, Map_total_cases, Map_total_deaths, Map_people_vaccinated, Pais], axis=1)
 
-map_cases_deaths.columns = ['iso_code', 'Total contagiados', 'Total fallecidos', 'Pais']
+map_cases_deaths.columns = ['iso_code', 'Total contagiados', 'Total fallecidos', 'Total vacunados', 'Pais']
 
 
 ##################################
@@ -126,22 +130,24 @@ map_cases_deaths.columns = ['iso_code', 'Total contagiados', 'Total fallecidos',
 
 Country_total_cases = actual['total_cases']
 Country_total_deaths = actual['total_deaths']
+Country_total_people_vaccinated = actual['people_vaccinated']
 Pais = actual['location']
 
-Country_total_cases_deaths = pd.concat([Country_total_cases, Country_total_deaths, Pais], axis=1)
+Country_total_cases_deaths = pd.concat([Country_total_cases, Country_total_deaths, Country_total_people_vaccinated, Pais], axis=1)
 
-Country_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Pais']
+Country_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados', 'Pais']
 
 ##################################
 #### For continent select
 
 Continent_total_cases = actual['total_cases']
 Continent_total_deaths = actual['total_deaths']
+Continent_total_people_vaccinated = actual['people_vaccinated']
 Continente = actual['continent']
 
-Continent_total_cases_deaths = pd.concat([Continent_total_cases, Continent_total_deaths, Continente], axis=1)
+Continent_total_cases_deaths = pd.concat([Continent_total_cases, Continent_total_deaths, Continent_total_people_vaccinated, Continente], axis=1)
 
-Continent_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Continente']
+Continent_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados', 'Continente']
 
 
 ##################################
@@ -150,9 +156,9 @@ Continent_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos',
 # Table_total_cases = actual['total_cases']
 # Table_total_deaths = actual['total_deaths']
 
-table1 = pd.concat([Pais, Continente, Country_total_cases, Country_total_deaths], axis=1)
+table1 = pd.concat([Pais, Continente, Country_total_cases, Country_total_deaths, Country_total_people_vaccinated], axis=1)
 
-table1.columns = ['País', 'Continente','Total contagiados', 'Total fallecidos']
+table1.columns = ['País', 'Continente','Total contagiados', 'Total fallecidos', 'Total vacunados']
 
 ##################################
 #### app layout
@@ -202,6 +208,16 @@ app.layout = html.Div(style={'display':'block',
                                     dbc.Card(
                                         dbc.CardBody(
                                             [
+                                                html.H5("Vacunados", className="card-title"),
+                                                html.P("{:,.0f}".format(total_res_wor['Vacunados'][0]),
+                                                    className="card-text"
+                                                )
+                                            ]
+                                        ), style = {'background-color':'#5A5766'},
+                                    ),
+                                    dbc.Card(
+                                        dbc.CardBody(
+                                            [
                                                 html.H5("Fecha reporte", className="card-title"),
                                                 html.P("{}".format(total_res_wor['Fecha'][0]),
                                                     className="card-text"
@@ -218,7 +234,7 @@ app.layout = html.Div(style={'display':'block',
                     ## Contagios
                     html.Br(),
                     html.H2('Dashboard mundo', style = {'background-color':'#5A5766'}),
-                    html.P('Seleccione Contagios o fallecidos'),
+                    html.P('Seleccione Contagios, fallecidos o vacunados'),
                     html.Div([
                         dcc.Dropdown(id = 'yaxis',
                                     className='btn-sm m-0 p-0 pl-0 pr-0',
@@ -378,8 +394,11 @@ def upgrade_map(yaxis_name_map):
 def upgrade_country(yaxis_name_country):
     if yaxis_name_country == 'Total contagiados':
         Data_bar = Country_total_cases_deaths.sort_values('Total contagiados',ascending=False).head(20)
-    else:
+    elif yaxis_name_country == 'Total fallecidos':
         Data_bar = Country_total_cases_deaths.sort_values('Total fallecidos',ascending=False).head(20)
+    else:
+        Data_bar = Country_total_cases_deaths.sort_values('Total vacunados',ascending=False).head(20)
+        
 
     trace1 = go.Bar(x=Data_bar['Pais'], y=Data_bar[yaxis_name_country])
 
