@@ -86,6 +86,8 @@ actual = actual[actual['location'] != 'European Union']
 actual = actual[actual['location'] != 'South Africa']
 actual = actual[actual['location'] != 'Oceania']  
 
+#and 'North America' and 'Asia' and 'South America' and 'Africa'
+
 
 #preview_actual = df.pivot_table(index = df['location']).reset_index()
 ##preview_actual = df.pivot_table(index = df['location'],aggfunc='max').reset_index()
@@ -156,23 +158,23 @@ table1.columns = ['País', 'Continente','Total contagiados', 'Total fallecidos']
 #### app layout
 
 colors = {
-    #'background': '#5A5766',
+    'background': '#5A5766',
     #'text': '#FFFFFF'
 }
 
 
 app.layout = html.Div(style={'display':'block',
-                              #'background-color':'#48435C',
+                              'background-color':'#48435C',
                               'margin-left':'auto',
                               'margin-right':'auto',
                               'text-align':'center',
                               'width': '95%',
-                              #'color':'white',
+                              'color':'white',
                               'border': '1px solid #000'}, children = [
-                    html.H1('Análisis Covid', style = {'background-color':'#48435C', 'color':'white'}),
+                    html.H1('Análisis Covid', style = {'background-color':'#5A5766', 'color':'white'}),
                     html.Br(),
                     html.Div([
-                        html.H2('Resumen mundial', style = {'background-color':'#5A5766', 'color':'white'}),
+                        html.H2('Resumen mundial', style = {'background-color':'#5A5766'}),
                         html.Br(),
 
                         dbc.CardDeck(
@@ -215,13 +217,13 @@ app.layout = html.Div(style={'display':'block',
                     ############
                     ## Contagios
                     html.Br(),
-                    html.H2('Dashboard mundo', style = {'background-color':'#5A5766', 'color':'white'}),
+                    html.H2('Dashboard mundo', style = {'background-color':'#5A5766'}),
                     html.P('Seleccione Contagios o fallecidos'),
                     html.Div([
                         dcc.Dropdown(id = 'yaxis',
                                     className='btn-sm m-0 p-0 pl-0 pr-0',
                                     options = [{'label': i, 'value': i} for i in features],
-                                    value = 'Total contagiados' ,style = {'background-color':'#5A5766', 'color': 'black'}
+                                    value = 'Total contagiados' ,style = {'background-color':'#F6F6F6', 'color': 'black'}
                                      )
                     ]),
 
@@ -265,7 +267,8 @@ app.layout = html.Div(style={'display':'block',
                                                         sort_mode='single',
                                                         sort_by=[],
                                                         style_table={'overflowY': 'auto'},
-                                                        style_cell={'minWidth': 80, 'maxWidth': 80, 'width': 80, 'backgroundColor': '#5A5766', 'textAlign': 'center'}
+                                                        style_cell={'minWidth': 80, 'maxWidth': 80, 'width': 80, 'textAlign': 'center', 'color': 'black', #'backgroundColor': '#5A5766',
+                                                                    }
                                                 )
 
                                 ), className="col-12 col-sm-6 col-lg-6"),
@@ -285,7 +288,7 @@ app.layout = html.Div(style={'display':'block',
                             options = [{'label': i, 'value': i} for i in DF_total.Pais.unique()],
                             multi = True,
                             value = ['Colombia', 'Peru', 'Ecuador', 'Mexico', 'Argentina'],
-                            style = {'background-color':'#5A5766', 'color': 'black'}
+                            style = {'background-color':'#F6F6F6', 'color': 'black'}
                             )
                         ]),
                         html.Br(),
@@ -339,9 +342,9 @@ def upgrade_graph(yaxis_name):
                         xaxis = {'title': 'Fecha'},
                         yaxis = {'title': yaxis_name},
                         hovermode = 'closest',
-                        plot_bgcolor  = '#5A5766',
-                        paper_bgcolor  = '#5A5766',
-                        font_color = '#FFFFFF'
+                        #plot_bgcolor  = '#5A5766',
+                        #paper_bgcolor  = '#5A5766',
+                        #font_color = '#FFFFFF'
                         ),
             }
 
@@ -357,12 +360,14 @@ def upgrade_map(yaxis_name_map):
                  colorscale="viridis",
                  colorbar = {'title': 'Contagios y fallecidos'} )
 
-    layout = go.Layout(dict (geo = dict (showframe = False, projection = {'type':'mercator'}, bgcolor = '#5A5766'),
+    layout = go.Layout(dict (geo = dict (showframe = False, projection = {'type':'mercator'}, #bgcolor = '#5A5766'
+                                         ),
                          title='Mapa estado por pais',
                          hovermode = 'closest',
-                         plot_bgcolor  = '#5A5766',
-                         paper_bgcolor  = '#5A5766',
-                         font_color = '#FFFFFF'))
+                         #plot_bgcolor  = '#5A5766',
+                         #paper_bgcolor  = '#5A5766',
+                         #font_color = '#FFFFFF'
+                         ))
 
     return {"data": [data], "layout": layout}
 
@@ -384,9 +389,9 @@ def upgrade_country(yaxis_name_country):
                         xaxis = {'title': 'País'},
                         yaxis = {'title': yaxis_name_country},
                         hovermode = 'closest',
-                        plot_bgcolor  = '#5A5766',
-                        paper_bgcolor  = '#5A5766',
-                        font_color = '#FFFFFF'
+                        #plot_bgcolor  = '#5A5766',
+                        #paper_bgcolor  = '#5A5766',
+                        #font_color = '#FFFFFF'
                         ),
             }
 
@@ -403,9 +408,10 @@ def upgrade_continent(yaxis_name_continent):
 
 
     ,'layout': go.Layout(title= yaxis_name_continent+' por continente',
-                        plot_bgcolor  = '#5A5766',
-                        paper_bgcolor  = '#5A5766',
-                        font_color = '#FFFFFF'),
+                        #plot_bgcolor  = '#5A5766',
+                        #paper_bgcolor  = '#5A5766',
+                        #font_color = '#FFFFFF'
+                        ),
             }
 
 @app.callback(
@@ -454,9 +460,9 @@ def date_graph_country(country_values, yaxis_date_estate):
                         xaxis = {'title': 'Fecha'},
                         yaxis = {'title': yaxis_date_estate},
                         hovermode = 'closest',
-                        plot_bgcolor  = '#5A5766',
-                        paper_bgcolor  = '#5A5766',
-                        font_color = '#FFFFFF'
+                        #plot_bgcolor  = '#5A5766',
+                        #paper_bgcolor  = '#5A5766',
+                        #font_color = '#FFFFFF'
                         ),
             }
 
