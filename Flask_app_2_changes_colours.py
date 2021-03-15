@@ -35,7 +35,7 @@ app = dash.Dash(__name__, server=server, external_stylesheets=[dbc.themes.BOOTST
 ##################################
 ### Data base
 
-df = pd.read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv')
 
 # print (df.head())
 date_string = df['date']
