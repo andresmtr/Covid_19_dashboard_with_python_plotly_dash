@@ -49,7 +49,7 @@ DF_people_vaccinated = df['people_vaccinated']
 
 DF_total = pd.concat([DF_Date, DF_Continent, DF_country, DF_Cases, DF_deaths, DF_people_vaccinated], axis=1)
 
-DF_total.columns = ['Fecha', 'Continente', 'Pais', 'Total contagiados', 'Total fallecidos', 'Total vacunados']
+DF_total.columns = ['Date', 'Continent', 'Country', 'Total Infections', 'Total Deaths', 'Total Vaccinated']
 
 
 ##################################
@@ -66,7 +66,7 @@ Contagios = Only_world2['total_cases'].sum()
 Total_deaths = Only_world2['total_deaths'].sum()
 Vacunados = Only_world2['people_vaccinated'].sum()
 
-total_res_wor = pd.DataFrame({'Contagiados': [Contagios],'Fallecidos': [Total_deaths], 'Vacunados':[Vacunados] ,'Fecha':[fecha2]})
+total_res_wor = pd.DataFrame({'Infections': [Contagios],'Deaths': [Total_deaths], 'Vaccinated':[Vacunados] ,'Date':[fecha2]})
 
 ##################################
 #### contagio fecha
@@ -109,7 +109,7 @@ Wd_date = Wd['date']
 
 date_cases_deaths = pd.concat([Wd_cases, Wd_deaths, Wd_people_vaccinated], axis=1)
 
-date_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados']
+date_cases_deaths.columns = ['Total Infections', 'Total Deaths', 'Total Vaccinated']
 
 features = date_cases_deaths.columns
 
@@ -125,7 +125,7 @@ Pais = actual['location']
 
 map_cases_deaths = pd.concat([iso, Map_total_cases, Map_total_deaths, Map_people_vaccinated, Pais], axis=1)
 
-map_cases_deaths.columns = ['iso_code', 'Total contagiados', 'Total fallecidos', 'Total vacunados', 'Pais']
+map_cases_deaths.columns = ['iso_code', 'Total Infections', 'Total Deaths', 'Total Vaccinated', 'Country']
 
 
 ##################################
@@ -138,7 +138,7 @@ Pais = actual['location']
 
 Country_total_cases_deaths = pd.concat([Country_total_cases, Country_total_deaths, Country_total_people_vaccinated, Pais], axis=1)
 
-Country_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados', 'Pais']
+Country_total_cases_deaths.columns = ['Total Infections', 'Total Deaths', 'Total Vaccinated', 'Country']
 
 ##################################
 #### For continent select
@@ -150,7 +150,7 @@ Continente = actual['continent']
 
 Continent_total_cases_deaths = pd.concat([Continent_total_cases, Continent_total_deaths, Continent_total_people_vaccinated, Continente], axis=1)
 
-Continent_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos', 'Total vacunados', 'Continente']
+Continent_total_cases_deaths.columns = ['Total Infections', 'Total Deaths', 'Total Vaccinated', 'Continent']
 
 
 ##################################
@@ -161,7 +161,7 @@ Continent_total_cases_deaths.columns = ['Total contagiados', 'Total fallecidos',
 
 table1 = pd.concat([Pais, Continente, Country_total_cases, Country_total_deaths, Country_total_people_vaccinated], axis=1)
 
-table1.columns = ['País', 'Continente','Total contagiados', 'Total fallecidos', 'Total vacunados']
+table1.columns = ['Country', 'Continent','Total Infections', 'Total Deaths', 'Total Vaccinated']
 
 ##################################
 #### app layout
@@ -180,10 +180,10 @@ app.layout = html.Div(style={'display':'block',
                               'width': '95%',
                               'color':'white',
                               'border': '1px solid #000'}, children = [
-                    html.H1('Análisis Covid', style = {'background-color':'#5A5766', 'color':'white'}),
+                    html.H1('Covid analysis', style = {'background-color':'#5A5766', 'color':'white'}),
                     html.Br(),
                     html.Div([
-                        html.H2('Resumen mundial', style = {'background-color':'#5A5766'}),
+                        html.H2('World overview', style = {'background-color':'#5A5766'}),
                         html.Br(),
 
                         dbc.CardDeck(
@@ -191,8 +191,8 @@ app.layout = html.Div(style={'display':'block',
                                     dbc.Card(
                                         dbc.CardBody(
                                             [
-                                                html.H5("Contagios", className="card-title"),
-                                                html.P("{:,.0f}".format(total_res_wor['Contagiados'][0]),
+                                                html.H5("Infections", className="card-title"),
+                                                html.P("{:,.0f}".format(total_res_wor['Infections'][0]),
                                                     className="card-text"
                                                 )
                                             ]
@@ -201,8 +201,8 @@ app.layout = html.Div(style={'display':'block',
                                     dbc.Card(
                                         dbc.CardBody(
                                             [
-                                                html.H5("Fallecidos", className="card-title"),
-                                                html.P("{:,.0f}".format(total_res_wor['Fallecidos'][0]),
+                                                html.H5("Deaths", className="card-title"),
+                                                html.P("{:,.0f}".format(total_res_wor['Deaths'][0]),
                                                     className="card-text"
                                                 )
                                             ]
@@ -211,8 +211,8 @@ app.layout = html.Div(style={'display':'block',
                                     dbc.Card(
                                         dbc.CardBody(
                                             [
-                                                html.H5("Vacunados", className="card-title"),
-                                                html.P("{:,.0f}".format(total_res_wor['Vacunados'][0]),
+                                                html.H5("Vaccinated", className="card-title"),
+                                                html.P("{:,.0f}".format(total_res_wor['Vaccinated'][0]),
                                                     className="card-text"
                                                 )
                                             ]
@@ -221,8 +221,8 @@ app.layout = html.Div(style={'display':'block',
                                     dbc.Card(
                                         dbc.CardBody(
                                             [
-                                                html.H5("Fecha reporte", className="card-title"),
-                                                html.P("{}".format(total_res_wor['Fecha'][0]),
+                                                html.H5("Date report", className="card-title"),
+                                                html.P("{}".format(total_res_wor['Date'][0]),
                                                     className="card-text"
                                                 )
                                             ]
@@ -236,13 +236,13 @@ app.layout = html.Div(style={'display':'block',
                     ############
                     ## Contagios
                     html.Br(),
-                    html.H2('Dashboard mundo', style = {'background-color':'#5A5766'}),
-                    html.P('Seleccione Contagios, fallecidos o vacunados'),
+                    html.H2('Dashboard', style = {'background-color':'#5A5766'}),
+                    html.P('Select Infections, Deaths or Vaccinated'),
                     html.Div([
                         dcc.Dropdown(id = 'yaxis',
                                     className='btn-sm m-0 p-0 pl-0 pr-0',
                                     options = [{'label': i, 'value': i} for i in features],
-                                    value = 'Total contagiados' ,style = {'background-color':'#F6F6F6', 'color': 'black'}
+                                    value = 'Total Infections' ,style = {'background-color':'#F6F6F6', 'color': 'black'}
                                      )
                     ]),
 
@@ -301,10 +301,10 @@ app.layout = html.Div(style={'display':'block',
                                 html.Br(),
                             ]
                         ),
-                        html.P('Seleccione el pais y contagio o fallecidos'),
+                        html.P('Select contry and infections or deaths'),
                         html.Div([
                         dcc.Dropdown(id = 'df_country',
-                            options = [{'label': i, 'value': i} for i in DF_total.Pais.unique()],
+                            options = [{'label': i, 'value': i} for i in DF_total.Country.unique()],
                             multi = True,
                             value = ['Colombia', 'Peru', 'Ecuador', 'Mexico', 'Argentina'],
                             style = {'background-color':'#F6F6F6', 'color': 'black'}
@@ -321,13 +321,13 @@ app.layout = html.Div(style={'display':'block',
                         ),
                         html.Br(),
 
-                        html.H2('Referencias', style = {'background-color':'#5A5766', 'color':'white'}),
+                        html.H2('Source', style = {'background-color':'#5A5766', 'color':'white'}),
                         html.Br(),
-                        html.P('Información tomada de: ', style = {'text-align': 'center'}),
+                        html.P('Information take from: ', style = {'text-align': 'center'}),
                         html.A("Our World In Data", href="https://ourworldindata.org", target="_blank", className="alert-link", style = {'color': 'white'}),
                         html.Br(),
                         html.Br(),
-                        html.H3('Diseñado por: ', style = {'background-color':'#5A5766', 'color':'white'}),
+                        html.H3('Designed by: ', style = {'background-color':'#5A5766', 'color':'white'}),
                         html.Br(),
                         html.A("Andrés Triana", href="https://andresmtr.github.io/Andres_Triana_HV/", target="_blank", className="alert-link", style = {'color': 'white'}),
                         html.Br(),
@@ -357,8 +357,8 @@ def upgrade_graph(yaxis_name):
                 ]
 
 
-    ,'layout': go.Layout(title= yaxis_name+' por fecha',
-                        xaxis = {'title': 'Fecha'},
+    ,'layout': go.Layout(title= yaxis_name+' by date',
+                        xaxis = {'title': 'Date'},
                         yaxis = {'title': yaxis_name},
                         hovermode = 'closest',
                         #plot_bgcolor  = '#5A5766',
@@ -375,13 +375,13 @@ def upgrade_map(yaxis_name_map):
     data = dict (type = 'choropleth',
                  locations = map_cases_deaths['iso_code'],
                  z = map_cases_deaths[yaxis_name_map],
-                 text = map_cases_deaths['Pais'],
+                 text = map_cases_deaths['Country'],
                  colorscale="viridis",
-                 colorbar = {'title': 'Contagios y fallecidos'} )
+                 colorbar = {'title': 'Infections and Deaths'} )
 
     layout = go.Layout(dict (geo = dict (showframe = False, projection = {'type':'mercator'}, #bgcolor = '#5A5766'
                                          ),
-                         title='Mapa estado por pais',
+                         title='Map state by country',
                          hovermode = 'closest',
                          #plot_bgcolor  = '#5A5766',
                          #paper_bgcolor  = '#5A5766',
@@ -395,20 +395,20 @@ def upgrade_map(yaxis_name_map):
 @app.callback(Output('country-graphic', 'figure'),
                     [Input('yaxis', 'value')])
 def upgrade_country(yaxis_name_country):
-    if yaxis_name_country == 'Total contagiados':
-        Data_bar = Country_total_cases_deaths.sort_values('Total contagiados',ascending=False).head(20)
-    elif yaxis_name_country == 'Total fallecidos':
-        Data_bar = Country_total_cases_deaths.sort_values('Total fallecidos',ascending=False).head(20)
+    if yaxis_name_country == 'Total Infections':
+        Data_bar = Country_total_cases_deaths.sort_values('Total Infections',ascending=False).head(20)
+    elif yaxis_name_country == 'Total Deaths':
+        Data_bar = Country_total_cases_deaths.sort_values('Total Deaths',ascending=False).head(20)
     else:
-        Data_bar = Country_total_cases_deaths.sort_values('Total vacunados',ascending=False).head(20)
+        Data_bar = Country_total_cases_deaths.sort_values('Total Vaccinated',ascending=False).head(20)
         
 
-    trace1 = go.Bar(x=Data_bar['Pais'], y=Data_bar[yaxis_name_country])
+    trace1 = go.Bar(x=Data_bar['Country'], y=Data_bar[yaxis_name_country])
 
     return {
         'data': [trace1]
-    ,'layout': go.Layout(title= yaxis_name_country+' - primeros 20 paises',
-                        xaxis = {'title': 'País'},
+    ,'layout': go.Layout(title= yaxis_name_country+' - first 20 countries',
+                        xaxis = {'title': 'Country'},
                         yaxis = {'title': yaxis_name_country},
                         hovermode = 'closest',
                         #plot_bgcolor  = '#5A5766',
@@ -422,14 +422,14 @@ def upgrade_country(yaxis_name_country):
                     [Input('yaxis', 'value')])
 def upgrade_continent(yaxis_name_continent):
     return {
-        'data': [go.Pie(labels = Continent_total_cases_deaths['Continente'],
+        'data': [go.Pie(labels = Continent_total_cases_deaths['Continent'],
                             values = Continent_total_cases_deaths[yaxis_name_continent],
                             hoverinfo='label+percent', textinfo='label+value+percent', textfont_size=10 ),
 
                 ]
 
 
-    ,'layout': go.Layout(title= yaxis_name_continent+' por continente',
+    ,'layout': go.Layout(title= yaxis_name_continent+' by Continent',
                         #plot_bgcolor  = '#5A5766',
                         #paper_bgcolor  = '#5A5766',
                         #font_color = '#FFFFFF'
@@ -465,21 +465,21 @@ def update_table(page_current, page_size, sort_by):
                     [Input('df_country', 'value'),
                      Input('yaxis', 'value')])
 def date_graph_country(country_values, yaxis_date_estate):
-    dff = DF_total.loc[DF_total['Pais'].isin(country_values)]
+    dff = DF_total.loc[DF_total['Country'].isin(country_values)]
     return {
-        'data': [go.Scatter(x=dff[dff['Pais'] == Pais]['Fecha'],
-                            y=dff[dff['Pais'] == Pais][yaxis_date_estate],
-                            name=Pais,
+        'data': [go.Scatter(x=dff[dff['Country'] == Country]['Date'],
+                            y=dff[dff['Country'] == Country][yaxis_date_estate],
+                            name=Country,
                             # mode = 'Pais',
                             marker = {'size':15,
                                      'opacity':0.5,
                                      'line':{'width':0.5, 'color':'white'}}
-                            )for Pais in dff.Pais.unique()],
+                            )for Country in dff.Country.unique()],
 
 
 
-    'layout': go.Layout(title= yaxis_date_estate+' por fecha',
-                        xaxis = {'title': 'Fecha'},
+    'layout': go.Layout(title= yaxis_date_estate+' by date',
+                        xaxis = {'title': 'Date'},
                         yaxis = {'title': yaxis_date_estate},
                         hovermode = 'closest',
                         #plot_bgcolor  = '#5A5766',
